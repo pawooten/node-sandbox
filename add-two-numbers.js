@@ -25,31 +25,27 @@
     return nextNode;
 };
 const sumList = function(head) {
-    let sum = 0, stack = [], current = head;
+    let str = '', current = head;
     while (current != null) {
-        stack.push(current.val);
+        str = current.val += str;
         current = current.next;
     }
 
-    for (let power = 0; power < stack.length; power++) {
-        sum += Math.pow(10, power) * stack[power]; //stack[stack.length - 1 - power];
+    return BigInt(str);
+}
+
+const getList = function(values) {
+    let node = null, previous = null;
+    for (let index = values.length - 1; index >= 0; index--) {
+        node = new ListNode(values[index], previous);
+        previous = node;
     }
-
-    return sum;
+    return node;
 }
-
-const getList1 = function() {
-    const tail = { val: 3, next: null };
-    const second = { val: 4, next: tail };
-    const head = { val:2, next: second };
-    return head;
+function ListNode(val, next) {
+    this.val = (val===undefined ? 0 : val)
+    this.next = (next===undefined ? null : next)
 }
-
-const getList2 = function() {
-    const tail = { val: 4, next: null };
-    const second = { val: 6, next: tail };
-    const head = { val:5, next: second };
-    return head;
-}
-const result = addTwoNumbers(getList1(), getList2());
+const l1 = [2,4,9], l2 = [5,6,4,9];
+const result = addTwoNumbers(getList(l1), getList(l2));
 console.log('!');
