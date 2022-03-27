@@ -4,25 +4,29 @@
  * @return {number}
  */
  var removeElement = function(nums, val) {
-    // remove all occurences of val from nums in-place.
-    let index = nums.indexOf(val);
-    if (index === 0 && nums.length === 1) {
-        nums.pop();
-        return 0;
-    }
-    while (index > -1) {
-        // replace this match of val with the last element of the array and remove the last element of the array
-        let replacementValue;
-        do {
-            replacementValue = nums.pop();
-        } while (replacementValue === val);
-        if (replacementValue !== undefined) {
-            nums[index] = replacementValue;
-        }
-        index = nums.indexOf(val);
-    }
-    return nums.length;
+     let lastIndex = nums.length;
+     for (let index = 0; index < lastIndex; index++) {
+         if (nums[index] === val) {
+             // this index contains our value and must be overwritten by the rest of the array (if any)
+             let subIndex;
+             for (subIndex = index + 1; subIndex < lastIndex; subIndex++) {
+                if (nums[subIndex] != val) {
+                    lastIndex--;
+                    break;
+                }
+             }
+             // swap the val to move it towards the end of the array.
+             let temp = nums[subIndex];
+             nums[subIndex] = val;
+             nums[index] = temp;
+         }
+     }
+     for (index = lastIndex; index < nums.length; index++) {
+         nums[index] = 0;
+     }
+     return lastIndex;
 };
-const nums = [4,5], val = 5;
+const nums = 
+[0,1,2,2,3,0,4,2], val = 2;
 const result = removeElement(nums, val);
 console.log('!');
