@@ -4,11 +4,15 @@
  * @return {void} Do not return anything, modify nums in-place instead.
  */
  var rotate = function(nums, k) {
-    while (k > 0) {
-        k -= 1;
-        nums = [nums.pop(), ...nums];
+    const length = nums.length;
+    if (k > length) {
+        k = k % length;
+    }
+    let temp = [...nums.splice(length - k), ...nums];
+    for (let index = 0; index < length; index++) {
+        nums[index] = temp[index];
     }
 };
-const nums = [1,2,3,4,5,6,7], k=3;
+let nums = [1,2], k=5;
 const result = rotate(nums, k);
 console.log('!');
