@@ -17,13 +17,16 @@
         previous = nums[index];
         current++;
     }
+
     // How far away is current from length?
-    while (doublesVisited != misses.length) {
-        misses.push(current);
+    while (current <= nums.length) {
+        if (nums.indexOf(current) < 0) {
+            misses.push(current);
+        }
         current++;
     }
     return misses;
 };
-const nums = [1,1,2,2];
+const nums = [10,2,5,10,9,1,1,4,3,7];
 const result = findDisappearedNumbers(nums);
 console.log('!');
