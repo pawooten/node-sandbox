@@ -22,3 +22,14 @@ const getTree = function(values) {
     }
     return treeLevels[0][0];
 }
+
+const getList = function(values) {
+    const length = values.length;
+    const root = { val: values[0], next: null };
+    let current = root;
+    for (let index = 1; index < length; index++) {
+        current.next = { val: values[index], next: null };
+        current = current.next;
+    }
+    return root;
+}
