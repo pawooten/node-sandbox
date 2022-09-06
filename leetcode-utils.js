@@ -33,3 +33,39 @@ const getList = function(values) {
     }
     return root;
 }
+
+const getNTree = function(values, n) {
+    
+    // The first value in the array becomes the root of the n-ary tree.
+    let treeLevels = [[{val: values.shift(), children: [] }]];
+    while (values.length > 0) {
+        // Retrieve a reference to the nodes on the previous level of the tree.
+        let parentNodes = treeLevels.slice(-1)[0];
+        let childNodes = [], count, currentValue;
+
+        // Iterate over the nodes of the previous level of the tree.
+        parentNodes.forEach(parent => {
+            if (parent === null) {
+                // Skip to the next non-null parent.
+                return;
+            }
+
+            // Retrieve up to n children (null counts as a child).
+            count = n;
+            while (count > 0) {
+                currentValue = values.shift();
+                if (currentValue === null) {
+                    // Push null rather than { val: null, children: [] } when we encounter a null in the source values
+                    parent.children.push(null);
+                } else {
+                    // Instantiate a node to represent this non-null value and push it to it's siblings.
+                    parent.children.push({ val: currentValue, children: [] });
+                }
+                count--;
+            }
+            childNodes = childNodes.concat(parent.children);
+        });
+        treeLevels.push(childNodes);
+    }
+    return treeLevels[0][0];
+}
