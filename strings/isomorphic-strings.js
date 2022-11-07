@@ -4,29 +4,38 @@
  * @return {boolean}
  */
  var isIsomorphic = function(s, t) {
-    // Two strings are isomorphic if the characters in s can be replaced to get t.
+    // s and t are isomorphic if the characters in s can be replaced to get t. All occurences of a character must be replaced with another character
+    // while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.
 
-    const letterMap = new Map(), letterSet = new Set();
-    const sLetters = s.split(''), tLetters = t.split(''), length = sLetters.length;
-    let currentS, currentT;
+    const sCharacters = s.split(''), tCharacters = t.split(''), length  = sCharacters.length, characterMap = new Map(), mappedCharacters = new Set();
+    let currentSCharacter, mappedCharacter;
     for (let index = 0; index < length; index++) {
-        currentS = sLetters[index];
-        currentT = tLetters[index];
-        if (letterMap.has(currentS)) {
-            // A mapping for the current letter of s exists. If the mapping matchings we're ok, otherwise the strings are not isomorphic.
-            if (letterMap.get(currentS) !== currentT) {
-                // currentS is already mapped to a different letter than what we need to match t. The strings are not isomorphic.
+        currentSCharacter = sCharacters[index];
+        mappedCharacter = tCharacters[index];
+        // Have we already mapped this character?
+        if (!characterMap.has(currentSCharacter)) {
+            // We have yet to encounter this character while iterating over the characters of s, so it is not mapped. Is the character we need to map to already mapped?
+            if (!mappedCharacters.has(mappedCharacter)) {
+                // The character we need to map to is not currently mapped!
+                mappedCharacters.add(mappedCharacter);
+                characterMap.set(currentSCharacter, mappedCharacter);
+            } else {
+                // Bad news, this character isn't mapped, but the character we need to map it to is already mapped to a different character. Not isomorphic.
                 return false;
             }
         } else {
-            // Map this transform (even if currentS === curentT), unless 
-            letterMap.set(currentS, currentT);
+            // We have encountered this character before. Is the mapping compatible with the corresponding character of tCharacters?
+            if (characterMap.get(currentSCharacter) != mappedCharacter) {
+                // This character is mapped to a different character than the one we need to map it to in order for the strings to be isomorphic.
+                return false;
+            }
         }
     }
 
+    // We iterated across all characters of s without short circuiting, it is isomorphic!
     return true;
 };
 
-const s = "badc", t = "baba";
+const s = "paper", t = "title";
 const result = isIsomorphic(s, t);
 console.log('!');
