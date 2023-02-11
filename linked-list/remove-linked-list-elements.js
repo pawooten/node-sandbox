@@ -12,40 +12,29 @@
  */
  var removeElements = function(head, val) {
     if (!head) {
+        // a null reference to head indicates the list is empty.
         return null;
     }
-    // Handle cases where the value of head is the value to remove.
-    while (head && head.val == val) {
+    // If the head of the linked list matches val, we must walk the list until we find the node which
+    // will become the new head, the first node whose val !== val.
+    while (head && head.val === val) {
         head = head.next;
     }
-    if (!head) {
-        return null;
-    }
-    // Declare pointers to the current node and previouos node as we walk the list.
-    let previous = head, current = head.next;
-    if (!current) {
+    if (head === null) {
         return head;
     }
-    do {
-        if (current.val == val) {
-            // This node must be removed. Do we have a node to attach the previous node to (or are we removing the last node of the list?)
-            if (current.next) {
-                // Another node exists to attach.
-                previous.next = current.next;
-                previous = current;
-                current = current.next;
-            } else {
-                // This is the last node of the list
-                previous.next = null;
-                previous = null;
-                current = null;
-            }
+    // Now that we've found the new head node, walk the remainder of the list and remove any nodes whose val === val.
+    let previous = head, current = head.next;
+    while (current) {
+        if (current.val === val) {
+            // This node must be removed from the linked list. Attach the previous node to the node which follows this one (if any).
+            previous.next = current.next;
         } else {
-            // This node is allowed, move on to the next.
             previous = current;
-            current = current.next;
         }
-    } while (current);
+        current = current.next;
+    }
+
     return head;
 };
 
@@ -60,6 +49,6 @@ const getList = function(values) {
     return root;
 };
 
-const head = [1,2,6,3,4,5,6], val = 6;
+const head = [1,2,2,1], val = 2;
 const result = removeElements(getList(head), val);
 console.log('!');

@@ -3,13 +3,13 @@
  * @return {string[]}
  */
  var findWords = function(words) {
-    const firstRowLetters = new Set('qwertyuiop'.split('')), secondRowLetters = new Set('asdfghjkl'.split('')), thirdRowLetters= new Set(''.split('zxcvbnm'));
+    const firstRowLetters = new Set('qwertyuiop'.split('')), secondRowLetters = new Set('asdfghjkl'.split('')), thirdRowLetters= new Set('zxcvbnm'.split(''));
 
     const result = [];
     let row0Count, row1Count, row2Count;
     for (const word of words) {
         row0Count = 0, row1Count = 0, row2Count = 0;
-        let letters = word.split(''), length = letters.length - 1;
+        let letters = word.toLocaleLowerCase().split(''), length = letters.length;
         for (const letter of letters) {
             if (firstRowLetters.has(letter)) {
                 row0Count++;
@@ -31,6 +31,6 @@
     return result;
 };
 
-const words = ["Hello","Alaska","Dad","Peace"];
+const words = ["a", "b"];
 const result = findWords(words);
 console.log('!');

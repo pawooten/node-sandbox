@@ -3,34 +3,44 @@
  * @param {number[]} cost
  * @return {number}
  */
- var canCompleteCircuit = function(gas, cost) {
-  // given two integer arrays, gas and cost, return the starting gas station's index if youn can travel around the circuit once in the clockwise direction.
-  // otherwise return -1.  
+var canCompleteCircuit = function(gas, cost) {
+    const length = gas.length;
 
-  // it costs cost[i] of gas to travel from the ith station to it's next station.
+    const getNextIndex = (index) => {
+        index++;
+        if (index === length) {
+            index = 0;
+        }
+        return index;
+    };
 
-  // attempt to traverse the circuit for each starting index. 
-  for (let index = 0; index < gas.length; index++) {
-      // iterate across each of the starting location gas stations, and attempt to traverse the circuit.
-      let circuitIndex = index, currentGas = 0;
-      do {
-        currentGas += gas[circuitIndex];
-        // Do we have enough gas to reach the next station?
-          currentGas -= cost[circuitIndex];
-          circuitIndex++;
-          if (circuitIndex === gas.length) {
-              circuitIndex = 0;
-          }
+    const walkCircuit = (startIndex, currentIndex, currentGas) => {
+        while (currentGas > 0 && currentIndex !== startIndex) {
+            currentGas += gas[currentIndex] - cost[currentIndex];
+            currentIndex = getNextIndex(currentIndex);
+        }
+        if (currentIndex === startIndex && currentGas >= 0) {
+            circuitFound = true;
+            resultStartIndex = startIndex;
+        }
+    };
 
-      } while ( circuitIndex !== index && currentGas >= 0);
-      // We iterated back to the starting index without running out of gas, so we've found a starting index that
-      // can achieve a full circuit.
-      if (currentGas >= 0) {
-          return index;
-      }
-  }
-  return -1;
+    // Iterate across each gas station. If the amount of gas available meets or exceeds the cost to reach the next gas station,
+    // we should explore the possibility of a circuit from that gas station as a starting point.
+    let circuitFound = false, resultStartIndex, currentGas, currentCost;
+    for (let index = 0; index < length && !circuitFound; index++) {
+        currentGas = gas[index], currentCost = cost[index];
+        if (currentGas >= currentCost) {
+            // We start with an empty tank of gas, but the current gas station has enough gas available to reach the next one, so it
+            // could be a starting point of a complete circuit.
+            walkCircuit(index, getNextIndex(index), currentGas - currentCost);
+        }
+        // If we can't reach the next gas station, don't bother trying to explore this one as a starting point for a circuit.        
+    }
+
+    return circuitFound ? resultStartIndex : -1;
 };
-const gas = [1,2,3,4,5], cost = [3,4,5,1,2];
+
+const gas = [4,5,3,1,4], cost = [5,4,3,4,2];
 const result = canCompleteCircuit(gas, cost);
 console.log('!');
